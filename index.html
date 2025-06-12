@@ -1,0 +1,116 @@
+<!-- hospital: Ejercicio Práctico: Sistema de Turnos para una Clínica
+dardo: Objetivo
+Practicar el uso de la estructura de datos cola (queue) implementando un sistema de turnos para una clínica, con una pequeña interfaz web que permita interactuar con la cola como lo haría una empresa real en su monitor de turnos.
+ :portapapeles: Parte 1: Lógica en JavaScript
+ Crea una clase Queue que contenga:
+ enqueue(paciente)
+ dequeue()
+ peek() → para ver al siguiente en turno
+ isEmpty()
+ printQueue() (puede retornar un array o string de los pacientes en espera)
+ Cada paciente debe tener:
+ Nombre
+ Edad
+ Síntoma principal
+ :ordenador_de_sobremesa: Parte 2: Interfaz con HTML + JavaScript
+ Crea una pequeña página que permita:
+ Registrar paciente
+ Formulario con campos: nombre, edad y síntoma.
+ Botón para agregarlo a la cola.
+ Atender paciente
+ Botón que atienda (elimine de la cola) al paciente con más tiempo esperando.
+ Muestra en pantalla quién fue atendido.
+ Ver cola actual
+ Lista visual de los pacientes en espera, en orden.
+ Ver siguiente turno
+ Mostrar en grande (como en un televisor) el nombre del paciente que será atendido a continuación.
+ :bombilla: Recomendaciones para el diseño
+ Usa HTML simple, sin frameworks ni librerías externas.
+ Puedes usar Bootstrap 5 si quieres que lo practiquen.
+ Muestra el "turno actual" como si fuera una pantalla de televisor:
+ Bonus: Agrega sonido o una alerta visual cuando cambie el turno.
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+    <div class="container ">
+        <h1 class="text-center fw-bold mb-3" style="color: #0f766e;">Sistema de Turnos- Clínica Médica</h1>
+        <div class="row">
+            <div class=" 12  col-lg-4  p-2  border border-2">
+                <h3 class="mb-3" style="color: #0f766e;">Registrar Paciente </h3>
+                <div class="mb-3">
+                    <label for="formGroupExampleInput" class="form-label">Nombre Completo</label>
+                    <input type="text" class="form-control" id="inputNombre"
+                        placeholder="Nombre del Paciente">
+                </div>
+                <div class="mb-3">
+                    <label for="formGroupExampleInput2" class="form-label">Edad</label>
+                    <input type="text" class="form-control" id="inputEdad" placeholder="Edad">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Síntoma Principal</label>
+                    <textarea class="form-control" id="inputSintomaP"  rows="3"
+                        placeholder="Describa el síntoma Principal" ></textarea>
+                </div>
+                <button id="btnSend" type="button" class="btn btn-primary w-100 "
+                    style="background-color: #1f978d !important; ">Agregar a la cola</button>
+            </div>
+            <div class="col-12 my-3 my-lg-0  col-lg-8 border border-2">
+                <h2 class="text-center fw-bold" style="color: #0f766e;"><i class="bi bi-bell fs-3 fw-bold" style="color: #0f766e;"></i>Turno Actual</h2>
+                <div class="rounded-4 m-auto " style="background-color: #0f766e; height: 35% !important; width: 97%;">
+                    <h2 class="text-center pt-4 text-light fw-bolder" id="nameCurrent">-----------</h2>
+                    <h5 class="text-center text-light" id="contentCurrent"></h5>
+                </div>
+                <button class="btn btn-primary border border-0 p-2 m-auto d-flex justify-content-center px-4" id="btnNext"
+                    style="background-color: #24948a !important; ;">Atender Siguiente Paciente</button>
+                    <audio src="./assets/bright-notification-352449 (mp3cut.net).mp3" id="audio"></audio>
+                    <audio src="./assets/error-126627 (mp3cut.net).mp3" id="error"></audio>
+                <div class="card mt-3 " id="Next" hidden
+                    style="border: 1px solid #16b3a6da !important; background-color: #43b9af3b; height: 12%;">
+                    <div class="d-flex" >
+                        <h6 class="ms-2 mt-3">Proximo Turno: </h6>
+                        <p class="ms-2" id="nombreTurno" style="margin-top: 0.8rem;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-13 border border-2 mt-2 p-3  h-100">
+            <h3 style="color: #0f766e;">Pacientes en Espera</h3>
+            <h6 class="text-center text-secondary" id="nada">No hay pacientes en espera</h6>
+            <table class="table table-striped" id="table" hidden>
+                <thead>
+                    <tr style=" --bs-table-bg: #6eb4b4;">
+                        <th scope="col">Posición</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Edad</th>
+                        <th scope="col">Síntoma</th>
+                        <th scope="col">Hora de llegada</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">             
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./script.js"></script>
+</body>
+
+</html>
