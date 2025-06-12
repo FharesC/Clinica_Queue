@@ -1,35 +1,3 @@
-// :hospital: Ejercicio Práctico: Sistema de Turnos para una Clínica
-// :dardo: Objetivo
-// Practicar el uso de la estructura de datos cola (queue) implementando un sistema de turnos para una clínica, con una pequeña interfaz web que permita interactuar con la cola como lo haría una empresa real en su monitor de turnos.
-// :portapapeles: Parte 1: Lógica en JavaScript
-// Crea una clase Queue que contenga:
-// enqueue(paciente)
-// dequeue()
-// peek() → para ver al siguiente en turno
-// isEmpty()
-// printQueue() (puede retornar un array o string de los pacientes en espera)
-// Cada paciente debe tener:
-// Nombre
-// Edad
-// Síntoma principal
-// :ordenador_de_sobremesa: Parte 2: Interfaz con HTML + JavaScript
-// Crea una pequeña página que permita:
-// Registrar paciente
-// Formulario con campos: nombre, edad y síntoma.
-// Botón para agregarlo a la cola.
-// Atender paciente
-// Botón que atienda (elimine de la cola) al paciente con más tiempo esperando.
-// Muestra en pantalla quién fue atendido.
-// Ver cola actual
-// Lista visual de los pacientes en espera, en orden.
-// Ver siguiente turno
-// Mostrar en grande (como en un televisor) el nombre del paciente que será atendido a continuación.
-// :bombilla: Recomendaciones para el diseño
-// Usa HTML simple, sin frameworks ni librerías externas.
-// Puedes usar Bootstrap 5 si quieres que lo practiquen.
-// Muestra el "turno actual" como si fuera una pantalla de televisor:
-// Bonus: Agrega sonido o una alerta visual cuando cambie el turno.
-
 let Nombre = document.querySelector("#inputNombre");
 let Edad = document.querySelector("#inputEdad");
 let SintomaP = document.querySelector("#inputSintomaP");
@@ -44,8 +12,13 @@ let contentCurrent = document.querySelector("#contentCurrent");
 let audio = document.querySelector("#audio");
 let error = document.querySelector("#error");
 let Next = document.querySelector("#Next");
-let arrayPacientes = [];
+let arrayPacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
 
+addEventListener("DOMContentLoaded", () => {
+    arrayPacientes.forEach((item, index) => {
+    tableBody.innerHTML += newNode.printQueue(item, index + 1);
+  });
+});
 class Node {
   constructor(nombre, edad, sintomaP) {
     this.nombre = nombre;
@@ -100,6 +73,7 @@ class Queue {
     }
     this.length++;
     arrayPacientes.push(this.last);
+    localStorage.setItem("pacientes", JSON.stringify(arrayPacientes));
     tableBody.innerHTML += this.printQueue(
       arrayPacientes[this.length - 1],
       this.length
@@ -122,13 +96,14 @@ class Queue {
     this.first = this.first.next;
     tableBody.innerHTML = "";
     nameCurrent.innerHTML = arrayPacientes[0].nombre;
-    decir(`Turno de ${arrayPacientes[0].nombre}`)
+    decir(`Turno de ${arrayPacientes[0].nombre}`);
     contentCurrent.innerHTML = `${arrayPacientes[0].edad} años - ${arrayPacientes[0].sintomaP}`;
     arrayPacientes.shift();
+    localStorage.setItem("pacientes", JSON.stringify(arrayPacientes));
     arrayPacientes.forEach((item, index) => {
       tableBody.innerHTML += this.printQueue(item, index + 1);
     });
-    
+
     this.length--;
     return this;
   }
